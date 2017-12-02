@@ -63,12 +63,10 @@ What is the solution to your new captcha?
 function getSum(data, offset) {
     let sum = 0;
     for (let i = 0; i < data.length; i++) {
-        let length = data.length;
-        let currentNumber = Number(data[i]);
-        let targetIndex = i + offset;
-        let actualTargetIndex = targetIndex % length;
-        let actualTargetIndexNumber = Number(data[actualTargetIndex]);
-        sum += currentNumber == actualTargetIndexNumber ? actualTargetIndexNumber : 0;
+        let currentIndexNumber = Number(data[i]);
+        let targetIndex = (i+offset) % data.length;
+        let targetIndexNumber = Number(data[targetIndex]);
+        sum += currentIndexNumber == targetIndexNumber ? targetIndexNumber : 0;
     }
     return sum;
 }
