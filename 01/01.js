@@ -15,15 +15,15 @@ Collect stars by solving puzzles. Two puzzles will be made available on each day
 */
 
 // INPUT FOR DAY ONE
-// Using node.js's filesync module to get the input (syncronously):
+// Using node.js's filesync module to get the input from external file (syncronously):
 var fs = require('fs');
+var data;
 try {
-   var data = fs.readFileSync(__dirname+'\\01-input.txt', 'utf8');
+   data = fs.readFileSync(__dirname+'\\01-input.txt', 'utf8');
 } catch (error) {
     console.log('Error: ', error.stack)
 }
 
-const myInput = data;
 
 /*
 
@@ -44,30 +44,8 @@ For example:
 91212129 produces 9 because the only digit that matches the next one is the last digit, 9.
 What is the solution to your captcha?
 
-*/
-
-// Initialize sum (this will become our final solution):
-var sum = 0;
-
-// Look at every digit in the provided input one at a time and, if appropriate criteria met, add it to sum:
-for (let i = 0; i < myInput.length; i++) {
-    // Our current digit in question:
-    let currentDigit = Number(myInput[i]);
-    // If we're on the final digit, we need to compare to the FIRST digit:
-    if (i == (myInput.length-1)) {
-        // Add this last item to sum IF it matches the first item:
-        sum += (currentDigit == Number(myInput[0]) ? currentDigit : 0)
-    } else {
-        // Else (we're NOT currently on the final digit), we need to compare the current digit to the following digit, and add it to sum if it matches:
-        sum += (currentDigit == Number(myInput[i+1]) ? currentDigit : 0)
-    }
-}
-
-console.log("Your solution for DAY ONE PART ONE should be... *drumroll*..." + sum);
-
-/*
-
-DAY ONE, PART TWO
+PART TWO
+------------
 
 Now, instead of considering the next digit, it wants you to consider the digit halfway around the circular list. That is, if your list contains 10 items, only include a digit in your sum if the digit 10/2 = 5 steps forward matches it. Fortunately, your list has an even number of elements.
 
@@ -82,17 +60,18 @@ What is the solution to your new captcha?
 
 */
 
-// Reset our sum for part 2:
-sum = 0;
-
-// Look at every digit in the provided input one at a time and, if appropriate criteria met, add it to sum:
-for (let i = 0; i < myInput.length; i++) {
-    let length = myInput.length;
-    let currentNumber = Number(myInput[i]);
-    let targetIndex = i + length/2;
-    let actualTargetIndex = targetIndex % length;
-    let actualTargetIndexNumber = Number(myInput[actualTargetIndex]);
-    sum += currentNumber == actualTargetIndexNumber ? actualTargetIndexNumber : 0;
+function getSum(data, offset) {
+    let sum = 0;
+    for (let i = 0; i < data.length; i++) {
+        let length = data.length;
+        let currentNumber = Number(data[i]);
+        let targetIndex = i + offset;
+        let actualTargetIndex = targetIndex % length;
+        let actualTargetIndexNumber = Number(data[actualTargetIndex]);
+        sum += currentNumber == actualTargetIndexNumber ? actualTargetIndexNumber : 0;
+    }
+    return sum;
 }
 
-console.log("Your solution for DAY ONE PART TWO should be... *drumroll*..." + sum);
+console.log("Your solution for DAY ONE PART ONE should be... *drumroll*..." + getSum(data, 1));
+console.log("Your solution for DAY ONE PART TWO should be... *drumroll*..." + getSum(data, data.length/2));
