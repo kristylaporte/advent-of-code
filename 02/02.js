@@ -36,20 +36,20 @@ try {
     console.log('Error: ', error.stack)
 }
 
-//console.log(data);
 
-// Break data into individual lines (each line is a row in the "spreadsheet"):
-var dataLines = data.split('\n');
-//console.log(dataLines);
-
+// Break data into individual lines (because each line is a row in the "spreadsheet"):
+var os = require('os'); // for getting OS, so we can get the right EOL format
+var dataLines = data.split(os.EOL);
 
 function dayTwoPartOne (lines) {
-    console.log('dayTwoPartOne fired');
-    console.log(lines);
-    
-    // DO THE IMPORTANT STUFF HERE
-
-    return 'No solution yet...';
+    var sum = 0;
+    for (var line of dataLines) {
+        // Split the line (into array of strings) based on tab characters and convert to numbers:
+        line = line.split('\t').map(Number);
+        // Increment sum by the difference between the highest and lowest numbers in each line:
+        sum += ( (Math.max.apply(Math, line)) - (Math.min.apply(Math, line)) )
+    }
+    return sum;
 }
 
-console.log('dayTwoPartOne solution: '+dayTwoPartOne(dataLines))
+console.log('DAY TWO PART ONE solution: '+dayTwoPartOne(dataLines))
