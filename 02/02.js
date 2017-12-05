@@ -46,14 +46,9 @@ What is the sum of each row's result in your puzzle input?
 
 */
 
-// GETTING INPUT:
-var fs = require('fs');
-var data;
-try {
-   data = fs.readFileSync(__dirname+'\\02-input.txt', 'utf8');
-} catch (error) {
-    console.log('Error: ', error.stack)
-}
+// INPUT FOR THIS DAY'S PUZZLE:
+var getInput = require(__dirname+'\\..\\'+'get-input.js');
+var data = getInput.getInput('02');
 
 // Break data into individual lines (because each line is a row in the "spreadsheet"):
 var os = require('os'); // for getting OS, so we can get the right EOL format

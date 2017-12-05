@@ -14,15 +14,9 @@ Collect stars by solving puzzles. Two puzzles will be made available on each day
 
 */
 
-// INPUT FOR DAY ONE
-// Using node.js's filesync module to get the input from external file (syncronously):
-var fs = require('fs');
-var data;
-try {
-   data = fs.readFileSync(__dirname+'\\01-input.txt', 'utf8');
-} catch (error) {
-    console.log('Error: ', error.stack)
-}
+// INPUT FOR THIS DAY'S PUZZLE:
+var getInput = require(__dirname+'\\..\\'+'get-input.js');
+var data = getInput.getInput('01');
 
 
 /*

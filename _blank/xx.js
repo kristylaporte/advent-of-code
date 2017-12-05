@@ -10,16 +10,9 @@ Instructions go here.
 
 */
 
-// INPUT FOR THIS DAY'S PUZZLE
-// Using node.js's filesync module to get the input from external file (syncronously):
-var fs = require('fs');
-var data;
-try {
-   data = fs.readFileSync(__dirname+'\\xx-input.txt', 'utf8');
-} catch (error) {
-    console.log('Error: ', error.stack)
-}
-
+// INPUT FOR THIS DAY'S PUZZLE:
+var getInput = require(__dirname+'\\..\\'+'get-input.js');
+var data = getInput.getInput('xx');
 
 /*
 
