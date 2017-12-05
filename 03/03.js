@@ -12,8 +12,7 @@ Instructions go here.
 
 // INPUT FOR THIS DAY'S PUZZLE:
 var getInput = require(__dirname+'\\..\\'+'get-input.js');
-var data = getInput.getInput('02');
-
+var data = getInput.getInput('03');
 
 /*
 
@@ -51,5 +50,5 @@ function solution(part) {
 }
 
 // OUTPUTTING OUR SOLUTION:
-console.log("Your solution for DAY X PART X should be... *drumroll*..." + solution(1));
-console.log("Your solution for DAY X PART X should be... *drumroll*..." + solution(2));
+console.log("Your solution for DAY 3 PART 1 should be... *drumroll*..." + solution(1));
+console.log("Your solution for DAY 3 PART 2 should be... *drumroll*..." + solution(2));

@@ -49,10 +49,8 @@ What is the sum of each row's result in your puzzle input?
 // INPUT FOR THIS DAY'S PUZZLE:
 var getInput = require(__dirname+'\\..\\'+'get-input.js');
 var data = getInput.getInput('02');
-
 // Break data into individual lines (because each line is a row in the "spreadsheet"):
-var os = require('os'); // for getting OS, so we can get the right EOL format
-var dataLines = data.split(os.EOL);
+var dataLines = getInput.breakLines(data);
 // Split the lines (into arrays of strings) based on tab characters and convert resulting strings to numbers:
 for (let i = 0; i < dataLines.length; i++) {
     dataLines[i] = dataLines[i].split('\t').map(Number);

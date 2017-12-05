@@ -1,5 +1,4 @@
 module.exports = {
-    fs: require('fs'),
     getInput: function(day) { // pass day as a two digit string, ie '01'
         var fs = require('fs');
         try {
@@ -8,5 +7,10 @@ module.exports = {
         } catch (error) {
             console.log('Error: ', error.stack)
         }
+    },
+    breakLines: function (data) {
+        var os = require('os');
+        // break input data into array of lines:
+        return data.split(os.EOL);
     }
 }
