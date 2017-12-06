@@ -22,7 +22,10 @@ aa bb cc dd aaa is valid - aa and aaa count as different words.
 const getInput = require(__dirname+'\\..\\'+'get-input.js');
 const data = getInput.getInput('04');
 var dataLines = getInput.breakLines(data);
-
+// Split the lines (into arrays of strings) based on space characters:
+for (let i = 0; i < dataLines.length; i++) {
+    dataLines[i] = dataLines[i].split(' ');
+}
 /*
 
 PART ONE 
@@ -37,25 +40,36 @@ Instructions go here.
 */
 
 function solution(part) {
-    
-    var solution = "No solution yet..."
 
     if (part == 1) {
 
         // FINDING SOLUTION TO PART ONE:
 
+        let validPhrases = 0;
+
+        // Let's make each line a set of items, then check set length against original length. If the length matches, the phrase must be valid:
+        var dataLinesSet;
+        for (let i = 0; i < dataLines.length; i++) {
+            dataLinesSet = new Set(dataLines[i]);
+            validPhrases += dataLines[i].length == dataLinesSet.size ? 1 : 0;
+        }
+        
+        // Return the solution:
+        return validPhrases; 
+
     } else if (part == 2) {
 
         // FINDING SOLUTION TO PART TWO:
+
+        // Return the solution:
+        return "No solution yet..."
 
     } else {
         error('solution function must receive 1 or 2');
     }
 
-    return solution;
-
 }
 
 // OUTPUTTING OUR SOLUTION:
-console.log("Your solution for DAY 4 PART 1 should be... *drumroll*..." + solution(1));
-console.log("Your solution for DAY 4 PART 2 should be... *drumroll*..." + solution(2));
+console.log("Your solution for DAY 4 PART 1 should be... *drumroll*...\n" + solution(1));
+console.log("Your solution for DAY 4 PART 2 should be... *drumroll*...\n" + solution(2));
