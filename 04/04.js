@@ -48,9 +48,10 @@ function solution(part) {
         let validPhrases = 0;
 
         // Let's make each line a set of items, then check set length against original length. If the length matches, the phrase must be valid:
-        var dataLinesSet;
         for (let i = 0; i < dataLines.length; i++) {
-            dataLinesSet = new Set(dataLines[i]);
+            // Make a set version of the line so it won't contain duplicate words:
+            var dataLinesSet = new Set(dataLines[i]);
+            // If the set is the same length as the original line, then it did not contain any duplicate words so increment validPhrases count:
             validPhrases += dataLines[i].length == dataLinesSet.size ? 1 : 0;
         }
         
@@ -60,9 +61,23 @@ function solution(part) {
     } else if (part == 2) {
 
         // FINDING SOLUTION TO PART TWO:
-
+        let validPhrases = 0;
+        
+        // Let's make each line a set of items, then check set length against original length. If the length matches, the phrase must be valid:
+        var dataLinesSet;
+        for (let i = 0; i < dataLines.length; i++) {
+            // Convert word characters to array, sort alphabetically, convert word back to string:
+            for (let j = 0; j < dataLines[i].length; j++) {
+                dataLines[i][j] = dataLines[i][j].split('').sort().join('');
+            }
+            // Make a set of the line so duplicate words get removed:
+            dataLinesSet = new Set(dataLines[i]);
+            // If the set is the same length as the original line, then it did not contain any duplicate words so increment validPhrases count:
+            validPhrases += dataLines[i].length == dataLinesSet.size ? 1 : 0;
+        }
+                
         // Return the solution:
-        return "No solution yet..."
+        return validPhrases; 
 
     } else {
         error('solution function must receive 1 or 2');
