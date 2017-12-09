@@ -6,13 +6,13 @@ ADVENT OF CODE 2017
 DAY THREE: SPIRAL MEMORY 
 ===========================
 
-Instructions go here.
-
 */
 
 // INPUT FOR THIS DAY'S PUZZLE:
 var getInput = require(__dirname+'\\..\\'+'get-input.js');
 var data = getInput.getInput('03');
+//data = 120;
+console.log(data);
 
 /*
 
@@ -41,13 +41,120 @@ How many steps are required to carry the data from the square identified in your
 PART TWO
 ------------
 
-Instructions go here.
+As a stress test on the system, the programs here clear the grid and then store the value 1 in square 1. Then, in the same allocation order as shown above, they store the sum of the values in all adjacent squares, including diagonals.
+
+So, the first few squares' values are chosen as follows:
+
+Square 1 starts with the value 1.
+Square 2 has only one adjacent filled square (with value 1), so it also stores 1.
+Square 3 has both of the above squares as neighbors and stores the sum of their values, 2.
+Square 4 has all three of the aforementioned squares as neighbors and stores the sum of their values, 4.
+Square 5 only has the first and fourth squares as neighbors, so it gets the value 5.
+Once a square is written, its value does not change. Therefore, the first few squares would receive the following values:
+
+147  142  133  122   59
+304    5    4    2   57
+330   10    1    1   54
+351   11   23   25   26
+362  747  806--->   ...
+What is the first value written that is larger than your puzzle input?
 
 */
 
+
+
 function solution(part) {
-    return "No solution yet..."
+    
+    if (part == 1) {
+
+        // FINDING SOLUTION TO PART 1
+
+        var grid = [];
+        // Let's build the grid up to our number using the pattern that I figured out on paper earlier, using a pattern of drawing concentric squares spiralling out from the starting point in the center.
+        
+        // Starting point and start first square:
+        grid[0] = {
+            x: 0,
+            y: 0,
+            val: 1
+        }
+        grid[1] = {
+            x: 1,
+            y: 0,
+            val: 2
+        }
+        // Move right from starting point and start first concentric square pattern:
+        var currentX = 1;
+        var currentY = 0;
+        var currentNum = 2;
+        c = 1; // c represents which square we're currently on
+
+        function setGridPoint(dir) {
+            switch (dir) {
+                case 'up' :
+                    currentY++;
+                    break;
+                case 'left' :
+                    currentX--;
+                    break;
+                case 'down' :
+                    currentY--;
+                    break;
+                case 'right' :
+                    currentX++;
+                    break;     
+                default:
+                    error('setGridPoint(dir) must be given a string of "up", "left", "right" or "down".');    
+            }
+            currentNum++;
+            grid[currentNum-1] = {
+                val: currentNum,
+                x: currentX,
+                y: currentY
+            }
+        }
+        
+        while (currentNum <= data) {
+            // Move up as necessary:
+            for (i = 0; i < (2*c-1); i++ ) {
+                setGridPoint('up');
+            }
+            // Move left as necessary:
+            for (i = 0; i < (2*c); i++) {
+                setGridPoint('left');
+            }
+            // Move down as necessary:
+            for (i = 0; i < (2*c); i++) {
+                setGridPoint('down');
+            }
+            // Move right as necessary, including an extra move right to start next concentric square:
+            for (i = 0; i < (2*c+1); i++) {
+                setGridPoint('right');
+            }
+            // Time to start a new square:
+            c++;
+        }
+    
+        // Now we should have a grid drawn that runs up to our target number, so how far is it from x0 y0?
+        return Math.abs(grid[data-1].x) + Math.abs(grid[data-1].y);
+
+    } else if (part == 2) {
+
+        // FINDING SOLUTION TO PART TWO:
+    
+        return "No solution yet..."
+
+    } else {
+        error('solution function must receive 1 or 2');
+    }
+    
 }
+
+
+
+
+
+
 
 // OUTPUTTING OUR SOLUTION:
 console.log("Your solution for DAY 3 PART 1 should be... *drumroll*..." + solution(1));
