@@ -11,9 +11,6 @@ DAY THREE: SPIRAL MEMORY
 // INPUT FOR THIS DAY'S PUZZLE:
 var getInput = require(__dirname+'\\..\\'+'get-input.js');
 var data = getInput.getInput('03');
-//data = 120;
-console.log(data);
-
 /*
 
 PART ONE 
@@ -72,7 +69,7 @@ function solution(part) {
         var grid = [];
         // Let's build the grid up to our number using the pattern that I figured out on paper earlier, using a pattern of drawing concentric squares spiralling out from the starting point in the center.
         
-        // Starting point and start first square:
+        // Starting point and first square to its right:
         grid[0] = {
             x: 0,
             y: 0,
@@ -83,7 +80,7 @@ function solution(part) {
             y: 0,
             val: 2
         }
-        // Move right from starting point and start first concentric square pattern:
+        // Start first concentric square pattern:
         var currentX = 1;
         var currentY = 0;
         var currentNum = 2;
@@ -142,7 +139,122 @@ function solution(part) {
 
         // FINDING SOLUTION TO PART TWO:
     
-        return "No solution yet..."
+        var grid = [];
+        // Let's build the grid up to our number using the pattern that I figured out on paper earlier, using a pattern of drawing concentric squares spiralling out from the starting point in the center.
+        // For part 1 used an array of objects, but a multidimensional array is better for part 2, I think... Let's try it... e.g. grid[x][y] = number (NOTE: must define the first dimension of the array before you can assign the child values, so initialize properly if necessary each time to use it in any fashion.)
+        
+        // Manually setting starting point and second square:
+        grid[0] = [];
+        grid[0][0] = 1;
+        grid[1] = [];
+        grid[1][0] = 1;
+        var currentX = 1;
+        var currentY = 0;
+        var currentNum = 1;
+        c = 1; // c represents which concentric square we're currently on
+
+        function setGridPoint(dir) {
+            switch (dir) {
+                case 'up' :
+                    currentY++;
+                    break;
+                case 'left' :
+                    currentX--;
+                    break;
+                case 'down' :
+                    currentY--;
+                    break;
+                case 'right' :
+                    currentX++;
+                    break;     
+                default:
+                    error('setGridPoint(dir) must be given a string of "up", "left", "right" or "down".');    
+            }
+            // Add up any adjacent values to get the currentNum:
+            var adjCounts = 0;
+            // Check point down+left:
+            if (typeof grid[currentX-1] != "undefined") {
+                if (typeof grid[currentX-1][currentY-1] != "undefined") {
+                    adjCounts += grid[currentX-1][currentY-1] 
+                }
+            }; 
+            // Check point directly left:
+            if (typeof grid[currentX-1] != "undefined") {
+                if (typeof grid[currentX-1][currentY] != "undefined"){
+                   adjCounts += grid[currentX-1][currentY]  
+                }
+            }; 
+            // Check point up+left:
+            if (typeof grid[currentX-1] != "undefined") {
+                if (typeof grid[currentX-1][currentY+1] != "undefined"){
+                   adjCounts += grid[currentX-1][currentY+1]  
+                }
+            }; 
+            // Check point directly up:
+            if (typeof grid[currentX] != "undefined") {
+                if (typeof grid[currentX][currentY+1] != "undefined"){
+                    adjCounts += grid[currentX][currentY+1]    
+                }
+            }; 
+            // Check point up+right:
+            if (typeof grid[currentX+1] != "undefined") {
+                if (typeof grid[currentX+1][currentY+1] != "undefined"){
+                    adjCounts += grid[currentX+1][currentY+1] 
+                }
+            }; 
+            // Check point directly right:
+            if (typeof grid[currentX+1] != "undefined") {
+                if (typeof grid[currentX+1][currentY] != "undefined"){
+                    adjCounts += grid[currentX+1][currentY]   
+                }
+            }; 
+            // Check point down+right:
+            if (typeof grid[currentX+1] != "undefined") {
+                if (typeof grid[currentX+1][currentY-1] != "undefined"){
+                    adjCounts += grid[currentX+1][currentY-1]   
+                }
+            }; 
+            // Check point directly down:
+            if (typeof grid[currentX] != "undefined") {
+                if (typeof grid[currentX][currentY-1] != "undefined") {
+                    adjCounts += grid[currentX][currentY-1]
+                }                 
+            }; 
+            currentNum = adjCounts;
+            // Initialize if needed:
+            if(typeof grid[currentX] == "undefined") { grid[currentX] = [] }
+            // And finally set our point value:
+            grid[currentX][currentY] = currentNum;
+        }
+
+        
+        while (currentNum <= data) {
+            // Move up as necessary:
+            for (i = 0; i < (2*c-1); i++ ) {
+                if (currentNum > data) {break}
+                setGridPoint('up');
+            }
+            // Move left as necessary:
+            for (i = 0; i < (2*c); i++) {
+                if (currentNum > data) {break}
+                setGridPoint('left');
+            }
+            // Move down as necessary:
+            for (i = 0; i < (2*c); i++) {
+                if (currentNum > data) {break}
+                setGridPoint('down');
+            }
+            // Move right as necessary, including an extra move right to start next concentric square:
+            for (i = 0; i < (2*c+1); i++) {
+                if (currentNum > data) {break}
+                setGridPoint('right');
+            }
+            // Time to start a new square:
+            c++;
+        }
+
+        return currentNum;
+    
 
     } else {
         error('solution function must receive 1 or 2');
