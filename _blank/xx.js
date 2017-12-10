@@ -51,5 +51,5 @@ function solution(part) {
 }
 
 // OUTPUTTING OUR SOLUTION:
-console.log("Your solution for DAY X PART X should be... *drumroll*..." + solution(1));
-console.log("Your solution for DAY X PART X should be... *drumroll*..." + solution(2));
+console.log("Your solution for DAY X PART 1 should be... *drumroll*..." + solution(1));
+console.log("Your solution for DAY X PART 2 should be... *drumroll*..." + solution(2));
