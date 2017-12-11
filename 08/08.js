@@ -3,10 +3,8 @@
 ADVENT OF CODE 2017
 
 ===========================
-DAY X: 
+DAY 8: I Heard You Like Registers
 ===========================
-
-Instructions go here.
 
 */
 
