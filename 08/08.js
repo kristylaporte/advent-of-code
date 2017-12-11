@@ -13,7 +13,6 @@ Instructions go here.
 // INPUT FOR THIS DAY'S PUZZLE:
 var getInput = require(__dirname+'\\..\\'+'get-input.js');
 var data = getInput.getInput('08');
-var dataLines = getInput.breakLines(data);
 
 /*
 
@@ -43,104 +42,97 @@ What is the largest value in any register after completing the instructions in y
 PART TWO
 ------------
 
-
+To be safe, the CPU also needs to know the highest value held in any register during this process so that it can decide how much memory to allocate to these operations. For example, in the above instructions, the highest value ever held was 10 (in register c after the third instruction was evaluated).
 
 */
 
-function solution(part) {
-    
-    if (part == 1) {
+var dataLines = getInput.breakLines(data);
+var registers = {};
+var tracker = 0; // we'll use this to track the highest value we encounter (for part 2 solution)
 
-        // FINDING SOLUTION TO PART ONE:
-
-        var registers = {};
-
-        // Let's start by setting up all the registers we need with their initial 0 value:
-        for (i = 0; i < dataLines.length; i++) {
-            dataLines[i] = dataLines[i].split(' ');
-            registers[dataLines[i][0]] = 0;
-        }
-
-        /*
-        Now each data line is an array where:
-            [0] is the register name to edit
-            [1] is the instruction to "inc" (+) or "dec" (-)
-            [2] is the amount to inc or dec by
-            [3] is the word "if" (can ignore this)
-            [4][5][6] is the condition (register to look at, comparison operator, value to check against)
-        */
-
-        //console.log(registers); // lists registers with value of 0 as expected, yay!
-
-        // Let's make a function to check condition
-        function checkCondition(cond1, oper, cond2) { // seems to work allright...
-            switch (oper) {
-                case '==':
-                    return Number(cond1) == Number(cond2);
-                    break;
-                case '<':
-                    return Number(cond1) < Number(cond2);
-                    break;
-                case '<=':
-                    return Number(cond1) <= Number(cond2);
-                    break;
-                case '>':
-                    return Number(cond1) > Number(cond2);
-                    break;
-                case '>=':
-                    return Number(cond1) >= Number(cond2);
-                    break;
-                case '!=':
-                    return Number(cond1) != Number(cond2);
-                    break;
-            }
-        }
-
-        // Function to do the inc. or dec. if condition met
-        function doTheMath(regToAdj, inst, instBy, regToCheck, oper, cond2) {
-            switch (inst) {
-                case 'inc':
-                    if (checkCondition(registers[regToCheck], oper, cond2)) {registers[regToAdj] += instBy;}    
-                    break;
-                case 'dec':
-                if (checkCondition(registers[regToCheck], oper, cond2)) {registers[regToAdj] -= instBy;}    
-                    break;
-            }
-        }
-
-        // Now lets loop the data lines and do the things.
-        for (i = 0; i < dataLines.length; i++) {
-            doTheMath(
-                //registers[dataLines[i][0]], // to use for register to adjust THIS IS GIVING VALUE NOT REFERENCE
-                dataLines[i][0],            // to use to find register to adjust
-                dataLines[i][1],            // inc or decr
-                Number(dataLines[i][2]),    // amount to inc or decr by
-                dataLines[i][4],            // to use to find register to check
-                dataLines[i][5],            // operator
-                Number(dataLines[i][6])     // second part of condition
-            )
-        }
-
-        //console.log(registers); // Looks right!
-
-        // Make obj into array so we can use Math.max:
-        var registersArray = Object.keys( registers ).map(function ( key ) { return registers[key]; });
-        // Return solution:
-        return Math.max.apply(null, registersArray);
-
-    } else if (part == 2) {
-
-        // FINDING SOLUTION TO PART TWO:
-        
-        // Return the solution:
-        return "No solution yet..." 
-
-    } else {
-        error('solution function must receive 1 or 2');
-    }
-    
+// Let's start by setting up all the registers we need with their initial 0 value:
+for (i = 0; i < dataLines.length; i++) {
+    dataLines[i] = dataLines[i].split(' ');
+    registers[dataLines[i][0]] = 0;
 }
 
-// OUTPUTTING OUR SOLUTION:
-console.log("Your solution for DAY 8 PART 1 should be... *drumroll*..." + solution(1));
-console.log("Your solution for DAY 8 PART 2 should be... *drumroll*..." + solution(2));
+/*
+Now each data line is an array where:
+    [0] is the register name to edit
+    [1] is the instruction to "inc" (+) or "dec" (-)
+    [2] is the amount to inc or dec by
+    [3] is the word "if" (can ignore this)
+    [4][5][6] is the condition (register to look at, comparison operator, value to check against)
+*/
+
+//console.log(registers); // lists registers with value of 0 as expected, yay!
+
+// Let's make a function to check condition
+function checkCondition(cond1, oper, cond2) { // seems to work allright...
+    switch (oper) {
+        case '==':
+            return Number(cond1) == Number(cond2);
+            break;
+        case '<':
+            return Number(cond1) < Number(cond2);
+            break;
+        case '<=':
+            return Number(cond1) <= Number(cond2);
+            break;
+        case '>':
+            return Number(cond1) > Number(cond2);
+            break;
+        case '>=':
+            return Number(cond1) >= Number(cond2);
+            break;
+        case '!=':
+            return Number(cond1) != Number(cond2);
+            break;
+    }
+}
+
+// Function to do the inc. or dec. if condition met
+function doTheMath(regToAdj, inst, instBy, regToCheck, oper, cond2) {
+    // pass reference to the tracker var when doing step 2 so we can update it as necessary (used for tracking highest value encountered in any register)
+    switch (inst) {
+        case 'inc':
+            if (checkCondition(registers[regToCheck], oper, cond2)) {registers[regToAdj] += instBy;}    
+            break;
+        case 'dec':
+            if (checkCondition(registers[regToCheck], oper, cond2)) {registers[regToAdj] -= instBy;}    
+            break;
+    }
+}
+
+
+// Now lets loop the data lines and do the things.
+for (i = 0; i < dataLines.length; i++) {
+    doTheMath(
+        //registers[dataLines[i][0]], // to use for register to adjust THIS IS GIVING VALUE NOT REFERENCE
+        dataLines[i][0],            // to use to find register to adjust
+        dataLines[i][1],            // inc or decr
+        Number(dataLines[i][2]),    // amount to inc or decr by
+        dataLines[i][4],            // to use to find register to check
+        dataLines[i][5],            // operator
+        Number(dataLines[i][6])    // second part of condition
+        //registers                   // our register collection
+    )
+    console.log('tracker before update ' + tracker);
+    console.log(registers[dataLines[i][0]])
+    // if register that we just updated is now higher than the tracker, update the tracker:
+    tracker = registers[dataLines[i][0]] > tracker ? registers[dataLines[i][0]] : tracker;
+    console.log('tracker after updated! ' + tracker);
+}
+
+//console.log(registers); // Looks right!
+
+// Make registers obj into proper array so we can use Math.max:
+var registersArray = Object.keys( registers ).map(function ( key ) { return registers[key]; });
+
+console.log("Your solution for DAY 8 PART 1 should be... *drumroll*..." + 
+    Math.max.apply(null, registersArray)
+);
+
+console.log("Your solution for DAY 8 PART 2 should be... *drumroll*..." + 
+    tracker
+);
