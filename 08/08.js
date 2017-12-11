@@ -115,11 +115,8 @@ for (i = 0; i < dataLines.length; i++) {
         Number(dataLines[i][6])    // second part of condition
         //registers                   // our register collection
     )
-    console.log('tracker before update ' + tracker);
-    console.log(registers[dataLines[i][0]])
     // if register that we just updated is now higher than the tracker, update the tracker:
     tracker = registers[dataLines[i][0]] > tracker ? registers[dataLines[i][0]] : tracker;
-    console.log('tracker after updated! ' + tracker);
 }
 
 //console.log(registers); // Looks right!
